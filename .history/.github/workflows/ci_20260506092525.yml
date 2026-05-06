@@ -1,0 +1,16 @@
+name: CI Pipeline
+on: [push, pull_request]
+jobs:
+ test:
+  runs-on: ubuntu-latest
+  steps:
+  - uses: actions/checkout@v3
+  - uses: actions/setup-python@v4
+    with:
+      python-version: '3.11'
+  - run: pip install pytest    
+  - run: pytest test_app.py -v  
+  - name: Lint
+    run: pip install flake8 && flake8 app.py --max-line-length=100
+  - name: Coverage
+    run: pip install pytest-cov && pytest --cov=app --cov-report=term-missing
